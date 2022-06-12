@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './Fareswidget.css';
-
+import logo from './logo.png';
 
 const Fareswidget = () => {
 	
@@ -11,7 +11,7 @@ const Fareswidget = () => {
  const [helperText, setHelperText] = useState('');
  const [rideTotal, setRideTotal] = useState(0.00);
 
-//user options ( fix defaults )
+//user options
  const [fromZone, setFromZone] = useState('');
  const [whenRiding, setWhenRiding] = useState('weekday');
  const [wherePurchased, setWherePurchased] = useState('advance_purchase');
@@ -23,7 +23,6 @@ const Fareswidget = () => {
 	fetch('http://www.applabsllc.com/fares.php')
     .then((response) => response.json())
     .then((jsonData) => {
-		console.log("jsonData", jsonData);
 		//save retrieved data
 		setFares(jsonData);
 		//set helper texts
@@ -37,13 +36,38 @@ const Fareswidget = () => {
     .catch((error) => console.error(error));
  }, []);
  
+ //update total on change
  useEffect(() => {
-	 setHelperText(setHelperTexts[whenRiding]);
+	 setHelperText(helperTexts[whenRiding]);
 	 updateTotal();
  }, [fromZone, whenRiding, wherePurchased, ridesNeeded]);
  
  const updateTotal = () => {
+	if(faresLoaded){
 	
+	 
+	let zone = (fares.zones.filter((zone) => zone.zone == fromZone))[0];
+	let fare = (zone.fares.filter((fare) => fare.type == whenRiding && fare.purchase == wherePurchased))[0];
+	let totalFare = 0.00;
+	
+	
+		//determine cost for combination
+		if(fare.type == "anytime" && fare.purchase == "advance_purchase" && fare.trips == 10){
+						
+			alert("This type of fare is discounted and requires a bulk purchase of 10 rides");
+			//force rides to 10 if not 10
+			if(ridesNeeded != 10)
+			setRidesNeeded(10);
+		
+			totalFare = fare.price;
+		}else{
+			totalFare = ridesNeeded * fare.price;
+		}
+		
+		//update cost to layout
+		setRideTotal(totalFare.toFixed(2));
+		
+	}
  }
  
  
@@ -51,7 +75,7 @@ const Fareswidget = () => {
 	<div className="widgetWrapper">
 		<div className="widgetHeader">
 			<div className="blocky">
-				<img src="./img/logo.png" className="ridesLogo" />
+				<img src={logo} className="ridesLogo" />
 			</div>
 			<div className="blocky headerTitle">
 				Regional Rail Rates
@@ -77,7 +101,7 @@ const Fareswidget = () => {
 			</select>
 			
 			<div className="helperText" id="helperText">
-			
+				{helperText}
 			</div>
 			
 		</div>

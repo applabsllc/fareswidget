@@ -19,13 +19,8 @@
 	src: local('Open Sans Light'), local('OpenSans-Light'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff) format('woff');
 }
 
-body{
-background:#cfcfcf;
-font-family: 'Purista', 'Open Sans', sans-serif;
-		
-}
-
 .widgetWrapper{
+	font-family: 'Purista', 'Open Sans', sans-serif;
 	background: #f5f5f5;
 	border:1px soid #afafaf;
 	width: 100%;
