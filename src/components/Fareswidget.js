@@ -4,7 +4,7 @@ import logo from './logo.png';
 
 const Fareswidget = () => {
 	
-//hooks
+//general variables
  const [fares, setFares] = useState([]);
  const [faresLoaded, setFaresLoaded] = useState(false);
  const [helperTexts, setHelperTexts] = useState({});
@@ -20,6 +20,7 @@ const Fareswidget = () => {
 //useEffect
 
  useEffect(() => {
+	 //fetch from source
 	fetch('http://www.applabsllc.com/fares.php')
     .then((response) => response.json())
     .then((jsonData) => {
@@ -36,7 +37,7 @@ const Fareswidget = () => {
     .catch((error) => console.error(error));
  }, []);
  
- //update total on change
+ //update total and set helper text on change
  useEffect(() => {
 	 setHelperText(helperTexts[whenRiding]);
 	 updateTotal();
